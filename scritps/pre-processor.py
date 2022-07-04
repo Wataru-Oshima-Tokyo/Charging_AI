@@ -21,7 +21,7 @@ y_test  = [] # testing label
 for class_num, label in enumerate(labels):
     
     # the directory of picutres
-    photos_dir = "../models/outlet/" + label
+    photos_dir = "../models/" + label
     
     # get the picture data
     files = glob.glob(photos_dir + "/*.jpg")
