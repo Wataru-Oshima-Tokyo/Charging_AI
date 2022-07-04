@@ -7,12 +7,12 @@ def save_all_frames(video_path, dir_path, basename, ext='jpg'):
     if not cap.isOpened():
         return
 
-    os.makedirs(dir_path, exist_ok=True)
+    #os.makedirs(dir_path, exist_ok=True)
     base_path = os.path.join(dir_path, basename)
 
     digit = len(str(int(cap.get(cv2.CAP_PROP_FRAME_COUNT))))
 
-    n = 0
+    n = 122
 
     while True:
         ret, frame = cap.read()
@@ -22,6 +22,6 @@ def save_all_frames(video_path, dir_path, basename, ext='jpg'):
         else:
             return
 
-save_all_frames('videos/temp/', 'models/outlet/', 'outlet')
+save_all_frames('../videos/video2.mp4', '../models/outlet/', 'outlet')
 
 # save_all_frames('data/temp/sample_video.mp4', 'data/temp/result_png', 'sample_video_img', 'png')
