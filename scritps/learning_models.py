@@ -8,8 +8,8 @@ import numpy as np
 # class label
 labels = ["outlet"]
 # directory
-dataset_dir = "models/dataset.npy" # pre-processed data
-model_dir   = "models/cnn_h5"      # learned models
+dataset_dir = "../models/dataset.npy" # pre-processed data
+model_dir   = "../models/cnn_h5"      # learned models
 # resizing setting
 resize_settings = (50,50)
 
@@ -91,3 +91,5 @@ def evaluate(model,X_test,y_test):
     scores = model.evaluate(X_test,y_test,verbose=1)
     print("Test Loss: ", scores[0])
     print("test Accuracy: ", scores[1])
+
+model = main()
