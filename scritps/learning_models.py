@@ -69,7 +69,7 @@ def model_train(X_train,y_train):
     model.add(Activation('relu'))
     model.add(Dropout(0.5))
     # the output layer ( return 0 or 1 by softmax)
-    model.add(Dense(3)) 
+    model.add(Dense(1)) 
     model.add(Activation('softmax'))
     # optimized algorithm
     opt = tensorflow.keras.optimizers.RMSprop(lr=0.005, decay=1e-6)
