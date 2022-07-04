@@ -2,84 +2,84 @@ from PIL import Image
 import numpy as np
 import os,glob
 
-# クラスラベル
-labels = []
-basename="outlet"
-for i in range(474):
-    exp = basename +"_"
-    if i <10:
-        exp +="00" + str(i)
-    elif i<100:
-        exp +="0" + str(i)
-    else:
-        pass
-    labels.append(exp)
+#class labels
+labels = ["outlet"]
+#basename="outlet"
+# for i in range(474):
+#     exp = basename +"_"
+#     if i <10:
+#         exp +="00" + str(i)
+#     elif i<100:
+#         exp +="0" + str(i)
+#     else:
+#         pass
+#     labels.append(exp)
 
 # ディレクトリ
-dataset_dir = "../models/dataset.npy" # 前処理済みデータ
-model_dir   = "../models/cnn_h5"      # 学習済みモデル
+dataset_dir = "../models/dataset.npy" # pre-processed data
+model_dir   = "../models/cnn_h5"      # learned model
 # リサイズ設定
 resize_settings = (50,50)
 
-# 画像データ
-X_train = [] # 学習
-y_train = [] # 学習ラベル
-X_test  = [] # テスト
-y_test  = [] # テストラベル
+# picture data
+X_train = [] # learning
+y_train = [] # larning label
+X_test  = [] # test
+y_test  = [] # testing label
 
 for class_num, label in enumerate(labels):
     
-    # 写真のディレクトリ
+    # the directory of picutres
     photos_dir = "../models/outlet/" + label
     
-    # 画像データを取得
+    # get the picture data
     files = glob.glob(photos_dir + "/*.jpg")
     
-    #写真を順番に取得
+    #get a picture in order  
     for i,file in enumerate(files):
         
-        # 画像を1つ読込
+        # read one of them
         image = Image.open(file)
         
-        # 画像をRGBの3色に変換
+        # convert it to rgb
         image = image.convert("RGB")
         
-        # 画像のサイズを揃える
+        # resize the image
         image = image.resize(resize_settings)
         
-        # 画像を数字の配列変換
+        # transform it to numeric array
         data  = np.asarray(image) 
 
-        # テストデータ追加
+        # add a test data
         if i%4 ==0:
             X_test.append(data)
             y_test.append(class_num)
             
-        # 学習データ傘増し
-        else:            
-            # -20度から20度まで4度刻みで回転したデータを追加
+        # create differet angle of picture data
+        else:           
+            # add 4 degree rotated data from -20 to 20 degree 
             for angle in range(-25,20,5):
-                # 回転
+                # rotate it
                 img_r = image.rotate(angle)
-                # 画像 → 数字の配列変換
+                #image to nemric array
                 data  = np.asarray(img_r)
-                # 追加
+                # addition
                 X_train.append(data)
                 y_train.append(class_num)
-                # 画像左右反転
+                # flip the image
                 img_trans = image.transpose(Image.FLIP_LEFT_RIGHT)
                 data      = np.asarray(img_trans)
                 X_train.append(data)
                 y_train.append(class_num)        
         
         
-# X,YがリストなのでTensorflowが扱いやすいようnumpyの配列に変換
+# transfom it to numpy array so that tensorflow can easily handle it
 X_train = np.array(X_train)
 X_test  = np.array(X_test)
 y_train = np.array(y_train)
 y_test  = np.array(y_test)
 
 
-# 前処理済みデータを保存
+# save the pre-processed data
 dataset = (X_train,X_test,y_train,y_test)
 np.save(dataset_dir,dataset)
