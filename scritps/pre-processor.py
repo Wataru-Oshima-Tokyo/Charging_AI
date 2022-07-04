@@ -4,21 +4,12 @@ import os,glob
 
 #class labels
 labels = ["outlet"]
-#basename="outlet"
-# for i in range(474):
-#     exp = basename +"_"
-#     if i <10:
-#         exp +="00" + str(i)
-#     elif i<100:
-#         exp +="0" + str(i)
-#     else:
-#         pass
-#     labels.append(exp)
 
-# ディレクトリ
+
+# directory
 dataset_dir = "../models/dataset.npy" # pre-processed data
 model_dir   = "../models/cnn_h5"      # learned model
-# リサイズ設定
+# resizeing setting
 resize_settings = (50,50)
 
 # picture data
