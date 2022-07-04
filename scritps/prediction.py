@@ -13,27 +13,7 @@ model_dir   = "models/cnn_h5"      # learned models
 # resizing setting
 resize_settings = (50,50)
 
-# main funciton
-def main(path):
-    X     = []                               # 推論データ格納
-    image = Image.open(path)                 # 画像読み込み
-    image = image.convert("RGB")             # RGB変換
-    image = image.resize(resize_settings)    # リサイズ
-    data  = np.asarray(image)                # 数値の配列変換
-    X.append(data)
-    X     = np.array(X)
-    
-    # モデル呼び出し
-    model = predict()
-    
-    # numpy形式のデータXを与えて予測値を得る
-    model_output = model.predict([X])[0]
-    # 推定値 argmax()を指定しmodel_outputの配列にある推定値が一番高いインデックスを渡す
-    predicted = model_output.argmax()
-    # アウトプット正答率
-    accuracy = int(model_output[predicted] *100)
-    print("{0} ({1} %)".format(labels[predicted],accuracy))
-    
+
   
    
 # the funcfion of learning models
@@ -80,9 +60,24 @@ def predict():
     
     return model
     
-# evaluation function
-def evaluate(model,X_test,y_test):
-    # evaluate the models
-    scores = model.evaluate(X_test,y_test,verbose=1)
-    print("Test Loss: ", scores[0])
-    print("test Accuracy: ", scores[1])
+# main funciton
+def main(path):
+    X     = []                               # store the predcited model
+    image = Image.open(path)                 # read an image
+    image = image.convert("RGB")             # RGB transformation
+    image = image.resize(resize_settings)    # resizing
+    data  = np.asarray(image)                # numeric array conversion
+    X.append(data)
+    X     = np.array(X)
+    
+    # call the prediction function
+    model = predict()
+    
+    # get the predicted value by giving a numpy formatted data x
+    model_output = model.predict([X])[0]
+    # return the heighst index of predicted value in the array of model_output by setting the argmax()
+    predicted = model_output.argmax()
+    # the rate of correction
+    accuracy = int(model_output[predicted] *100)
+    print("{0} ({1} %)".format(labels[predicted],accuracy))
+    
