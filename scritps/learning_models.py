@@ -8,8 +8,8 @@ import numpy as np
 # class label
 labels = ["outlet"]
 # directory
-dataset_dir = "data/dataset.npy" # pre-processed data
-model_dir   = "data/cnn_h5"      # learned models
+dataset_dir = "models/dataset.npy" # pre-processed data
+model_dir   = "models/cnn_h5"      # learned models
 # resizing setting
 resize_settings = (50,50)
 
