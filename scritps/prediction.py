@@ -3,13 +3,16 @@ from keras.models import Sequential
 from keras.layers import Conv2D, MaxPooling2D
 from keras.layers import Activation,Dropout,Flatten,Dense
 from keras.utils  import np_utils
+import sys
 import numpy as np
+from PIL import Image
+from tensorflow import keras
 
 # class label
 labels = ["outlet"]
 # directory
-dataset_dir = "models/dataset.npy" # pre-processed data
-model_dir   = "models/cnn_h5"      # learned models
+dataset_dir = "../models/dataset.npy" # pre-processed data
+model_dir   = "../models/cnn_h5"      # learned models
 # resizing setting
 resize_settings = (50,50)
 
@@ -17,7 +20,7 @@ resize_settings = (50,50)
   
    
 # the funcfion of learning models
-def predict():
+def predict(X_train):
     
     #instantiate the class
     model = Sequential()
@@ -46,7 +49,7 @@ def predict():
     model.add(Activation('relu'))
     model.add(Dropout(0.5))
     # the output layer ( return 0 or 1 by softmax)
-    model.add(Dense(3)) 
+    model.add(Dense(1)) 
     model.add(Activation('softmax'))
     # optimized algorithm
     opt = tensorflow.keras.optimizers.RMSprop(lr=0.005, decay=1e-6)
@@ -56,12 +59,14 @@ def predict():
                   metrics=["accuracy"]
                  )
                   
-    model = keras.models.load_model("data/cnn_h5")
+    model = keras.models.load_model("../models/cnn_h5")
     
     return model
     
 # main funciton
 def main(path):
+    X_train,X_test,y_train,y_test = np.load(dataset_dir, allow_pickle=True)
+    X_train = X_train.astype("float") / X_train.max()
     X     = []                               # store the predcited model
     image = Image.open(path)                 # read an image
     image = image.convert("RGB")             # RGB transformation
@@ -71,7 +76,7 @@ def main(path):
     X     = np.array(X)
     
     # call the prediction function
-    model = predict()
+    model = predict(X_train)
     
     # get the predicted value by giving a numpy formatted data x
     model_output = model.predict([X])[0]
@@ -80,4 +85,10 @@ def main(path):
     # the rate of correction
     accuracy = int(model_output[predicted] *100)
     print("{0} ({1} %)".format(labels[predicted],accuracy))
+
+#prediction
+path = "../models/outlet/outlet_000.jpg"
+image = Image.open(path)
+
+main(path)
     
